@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Chrome, LockKeyhole } from "lucide-react";
+import { LockKeyhole, LogIn } from "lucide-react";
 
 import { signInWithGoogle } from "@/app/actions";
 import { getOptionalUser } from "@/lib/data";
@@ -35,7 +35,7 @@ export default async function LoginPage() {
         ) : (
           <form action={signInWithGoogle} className="mt-8">
             <button className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-white px-6 py-4 font-black text-slate-950 shadow-xl transition hover:-translate-y-0.5 hover:bg-cyan-50">
-              <Chrome className="h-5 w-5" />
+              <LogIn className="h-5 w-5" />
               Continue with Google
             </button>
           </form>

@@ -90,9 +90,10 @@ export async function getDashboardData(): Promise<{
     throw new Error(membershipsError.message);
   }
 
-  const groups = memberships
-    .map((membership) => membership.group)
-    .filter(Boolean) as unknown as Group[];
+  const membershipRows = (memberships ?? []) as unknown as Array<{ group: Group | Group[] | null }>;
+  const groups = membershipRows
+    .map((membership) => (Array.isArray(membership.group) ? membership.group[0] : membership.group))
+    .filter(Boolean) as Group[];
   const groupIds = groups.map((group) => group.id);
 
   if (groupIds.length === 0) {
