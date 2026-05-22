@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --background: #fafaf9;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --input: #ffffff;
+  --ring: #14b8a6;
+  --primary: #0d9488;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #15803d;
+  --warning: #b45309;
+  --accent: #fef3c7;
+  --accent-foreground: #78350f;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
+  --input: #18181b;
+  --ring: #2dd4bf;
+  --primary: #14b8a6;
+  --primary-foreground: #042f2e;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --accent: #422006;
+  --accent-foreground: #fde68a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-xl: 1rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+  body {
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: color-mix(in oklab, var(--card) 80%, transparent);
+    backdrop-filter: saturate(180%) blur(14px);
+  }
+  .ring-focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid transparent;
+  transition: transform 0.05s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.btn-primary:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--primary) 88%, black);
+}
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border-color: var(--border);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--secondary) 90%, black);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--muted);
+}
+.btn-destructive {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
+.btn-destructive:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--destructive) 88%, black);
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  border-radius: 0.75rem;
+  background: var(--input);
+  border: 1px solid var(--border);
+  padding: 0.6rem 0.875rem;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 25%, transparent);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+}
+.chip-success { background: color-mix(in oklab, var(--success) 18%, transparent); color: var(--success); border-color: color-mix(in oklab, var(--success) 30%, transparent); }
+.chip-danger  { background: color-mix(in oklab, var(--destructive) 18%, transparent); color: var(--destructive); border-color: color-mix(in oklab, var(--destructive) 30%, transparent); }
+.chip-neutral { background: var(--muted); color: var(--muted-foreground); }
