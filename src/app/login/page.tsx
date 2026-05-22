@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import LandingPage from '@/components/landing/LandingPage'
+import LoginPage from '@/components/auth/LoginPage'
 
-export default async function Home() {
+export default async function Login() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -10,5 +10,5 @@ export default async function Home() {
     redirect('/dashboard')
   }
 
-  return <LandingPage />
+  return <LoginPage />
 }
