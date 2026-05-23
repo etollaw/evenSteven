@@ -8,6 +8,8 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Field, Input } from "@/components/ui/Inputs";
 
+const POST_LOGIN_REDIRECT_KEY = "evensteven.postLoginRedirect";
+
 export default function LoginForm() {
   const params = useSearchParams();
   const redirect = params.get("redirect") ?? "/dashboard";
@@ -16,18 +18,31 @@ export default function LoginForm() {
   const [sent, setSent] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  function rememberPostLoginRedirect() {
+    try {
+      sessionStorage.setItem(POST_LOGIN_REDIRECT_KEY, redirect);
+    } catch {
+      // ignore (cookies blocked, private mode, etc.)
+    }
+  }
+
+  function callbackUrl() {
+    // MUST be added to Supabase → Auth → URL Configuration → Redirect URLs
+    // (otherwise Supabase falls back to the project's Site URL).
+    return `${window.location.origin}/auth/callback`;
+  }
+
   async function sendMagicLink(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
     setSending(true);
+    rememberPostLoginRedirect();
     try {
       const supabase = createSupabaseBrowserClient();
-      const callback = new URL("/auth/callback", window.location.origin);
-      callback.searchParams.set("next", redirect);
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: callback.toString(),
+          emailRedirectTo: callbackUrl(),
         },
       });
       if (error) throw error;
@@ -43,14 +58,13 @@ export default function LoginForm() {
 
   async function signInWithGoogle() {
     setGoogleLoading(true);
+    rememberPostLoginRedirect();
     try {
       const supabase = createSupabaseBrowserClient();
-      const callback = new URL("/auth/callback", window.location.origin);
-      callback.searchParams.set("next", redirect);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: callback.toString(),
+          redirectTo: callbackUrl(),
         },
       });
       if (error) throw error;

@@ -1,8 +1,31 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowRight, Banknote, Calculator, Sparkles, Users } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-export default function Home() {
+type PageProps = {
+  searchParams: Promise<{ code?: string; error?: string; error_description?: string; next?: string }>;
+};
+
+export default async function Home({ searchParams }: PageProps) {
+  const sp = await searchParams;
+
+  // Self-healing OAuth fallback: if Supabase fell back to the project's Site URL
+  // (because the production /auth/callback wasn't on the Redirect URL allow-list)
+  // we still complete the exchange instead of leaving the user stuck on the
+  // landing page with ?code=... hanging in the URL.
+  if (sp.code) {
+    const target = new URL("/auth/callback", "http://placeholder");
+    target.searchParams.set("code", sp.code);
+    if (sp.next) target.searchParams.set("next", sp.next);
+    redirect(target.pathname + target.search);
+  }
+  if (sp.error) {
+    const target = new URL("/login", "http://placeholder");
+    target.searchParams.set("error", sp.error_description || sp.error);
+    redirect(target.pathname + target.search);
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       <div

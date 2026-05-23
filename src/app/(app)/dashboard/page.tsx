@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { AvatarStack } from "@/components/ui/Avatar";
 import { formatMoney, formatSignedMoney, relativeDate } from "@/lib/utils";
 import { computeNetBalances } from "@/lib/optimizer";
+import { PostLoginRedirector } from "@/components/PostLoginRedirector";
 
 type GroupRow = {
   id: string;
@@ -136,6 +137,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      <PostLoginRedirector />
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Your groups</h1>
